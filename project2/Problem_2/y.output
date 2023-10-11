@@ -1,0 +1,1505 @@
+Grammar
+
+    0 $accept: Cprogram $end
+
+    1 Cprogram: Ccode
+
+    2 Ccode: preprocess body
+
+    3 preprocess: /* empty */
+    4           | IMPORT head preprocess
+    5           | DEFINE definition preprocess
+
+    6 head: '<' HFILE '>'
+    7     | '"' HFILE '"'
+
+    8 definition: function_declaration
+    9           | ID NUM
+
+   10 body: /* empty */
+   11     | function_declaration body
+
+   12 function_declaration: type_declaration '(' print_parameter ')' '{' statement '}'
+   13                     | VOID ID '(' print_parameter ')' '{' statement '}'
+
+   14 type_declaration: type ID_array
+
+   15 ID_array: ID array_dimention
+
+   16 type: INT
+   17     | CHAR
+
+   18 array_dimention: /* empty */
+   19                | '[' ']' array_dimention
+   20                | '[' NUM ']' array_dimention
+   21                | '[' ID ']' array_dimention
+
+   22 print_parameter: parameter
+
+   23 parameter: /* empty */
+   24          | type_declaration
+   25          | type_declaration ',' parameter
+
+   26 statement: /* empty */
+   27          | single_statement statement
+   28          | clause
+   29          | '{' statement '}'
+
+   30 single_statement: initialize_statement ';'
+   31                 | expression ';'
+   32                 | loop_control ';'
+   33                 | error ';'
+
+   34 clause: if_statement statement
+   35       | for_statement statement
+
+   36 single_or_brace_statement: single_statement
+   37                          | '{' statement '}'
+
+   38 initialize_statement: variable_declaration
+   39                     | assignment_statement
+
+   40 variable_declaration: type_declaration vars
+
+   41 vars: /* empty */
+   42     | ',' ID vars
+   43     | OP_ASSIGN expression
+
+   44 assignment_statement: ID_array OP_ASSIGN expression
+
+   45 if_statement: IF '(' print_test ')' single_or_brace_statement
+
+   46 for_statement: FOR '(' print_initialize ';' print_test ';' print_update ')' single_or_brace_statement
+
+   47 print_initialize: initialize_statement
+
+   48 print_test: expression
+
+   49 print_update: expression
+
+   50 loop_control: CONTINUE
+   51             | BREAK
+
+   52 expression: ID_array OP_INC
+   53           | factor operator_expression
+   54           | '(' expression ')'
+
+   55 factor: NUM
+   56       | ID_array
+
+   57 operator_expression: /* empty */
+   58                    | OP_ADD expression
+   59                    | OP_MUL expression
+   60                    | OP_LOGIC expression
+   61                    | OP_REL expression
+
+
+Terminals, with rules where they appear
+
+$end (0) 0
+'"' (34) 7
+'(' (40) 12 13 45 46 54
+')' (41) 12 13 45 46 54
+',' (44) 25 42
+';' (59) 30 31 32 33 46
+'<' (60) 6
+'>' (62) 6
+'[' (91) 19 20 21
+']' (93) 19 20 21
+'{' (123) 12 13 29 37
+'}' (125) 12 13 29 37
+error (256) 33
+DEFINE (258) 5
+IMPORT (259) 4
+INT (260) 16
+CHAR (261) 17
+VOID (262) 13
+IF (263) 45
+FOR (264) 46
+CONTINUE (265) 50
+BREAK (266) 51
+OP_ASSIGN (267) 43 44
+OP_INC (268) 52
+OP_ADD (269) 58
+OP_MUL (270) 59
+OP_LOGIC (271) 60
+OP_REL (272) 61
+ID (273) 9 13 15 21 42
+HFILE (274) 6 7
+NUM (275) 9 20 55
+
+
+Nonterminals, with rules where they appear
+
+$accept (32)
+    on left: 0
+Cprogram (33)
+    on left: 1, on right: 0
+Ccode (34)
+    on left: 2, on right: 1
+preprocess (35)
+    on left: 3 4 5, on right: 2 4 5
+head (36)
+    on left: 6 7, on right: 4
+definition (37)
+    on left: 8 9, on right: 5
+body (38)
+    on left: 10 11, on right: 2 11
+function_declaration (39)
+    on left: 12 13, on right: 8 11
+type_declaration (40)
+    on left: 14, on right: 12 24 25 40
+ID_array (41)
+    on left: 15, on right: 14 44 52 56
+type (42)
+    on left: 16 17, on right: 14
+array_dimention (43)
+    on left: 18 19 20 21, on right: 15 19 20 21
+print_parameter (44)
+    on left: 22, on right: 12 13
+parameter (45)
+    on left: 23 24 25, on right: 22 25
+statement (46)
+    on left: 26 27 28 29, on right: 12 13 27 29 34 35 37
+single_statement (47)
+    on left: 30 31 32 33, on right: 27 36
+clause (48)
+    on left: 34 35, on right: 28
+single_or_brace_statement (49)
+    on left: 36 37, on right: 45 46
+initialize_statement (50)
+    on left: 38 39, on right: 30 47
+variable_declaration (51)
+    on left: 40, on right: 38
+vars (52)
+    on left: 41 42 43, on right: 40 42
+assignment_statement (53)
+    on left: 44, on right: 39
+if_statement (54)
+    on left: 45, on right: 34
+for_statement (55)
+    on left: 46, on right: 35
+print_initialize (56)
+    on left: 47, on right: 46
+print_test (57)
+    on left: 48, on right: 45 46
+print_update (58)
+    on left: 49, on right: 46
+loop_control (59)
+    on left: 50 51, on right: 32
+expression (60)
+    on left: 52 53 54, on right: 31 43 44 48 49 54 58 59 60 61
+factor (61)
+    on left: 55 56, on right: 53
+operator_expression (62)
+    on left: 57 58 59 60 61, on right: 53
+
+
+state 0
+
+    0 $accept: . Cprogram $end
+
+    DEFINE  shift, and go to state 1
+    IMPORT  shift, and go to state 2
+
+    $default  reduce using rule 3 (preprocess)
+
+    Cprogram    go to state 3
+    Ccode       go to state 4
+    preprocess  go to state 5
+
+
+state 1
+
+    5 preprocess: DEFINE . definition preprocess
+
+    INT   shift, and go to state 6
+    CHAR  shift, and go to state 7
+    VOID  shift, and go to state 8
+    ID    shift, and go to state 9
+
+    definition            go to state 10
+    function_declaration  go to state 11
+    type_declaration      go to state 12
+    type                  go to state 13
+
+
+state 2
+
+    4 preprocess: IMPORT . head preprocess
+
+    '<'  shift, and go to state 14
+    '"'  shift, and go to state 15
+
+    head  go to state 16
+
+
+state 3
+
+    0 $accept: Cprogram . $end
+
+    $end  shift, and go to state 17
+
+
+state 4
+
+    1 Cprogram: Ccode .
+
+    $default  reduce using rule 1 (Cprogram)
+
+
+state 5
+
+    2 Ccode: preprocess . body
+
+    INT   shift, and go to state 6
+    CHAR  shift, and go to state 7
+    VOID  shift, and go to state 8
+
+    $default  reduce using rule 10 (body)
+
+    body                  go to state 18
+    function_declaration  go to state 19
+    type_declaration      go to state 12
+    type                  go to state 13
+
+
+state 6
+
+   16 type: INT .
+
+    $default  reduce using rule 16 (type)
+
+
+state 7
+
+   17 type: CHAR .
+
+    $default  reduce using rule 17 (type)
+
+
+state 8
+
+   13 function_declaration: VOID . ID '(' print_parameter ')' '{' statement '}'
+
+    ID  shift, and go to state 20
+
+
+state 9
+
+    9 definition: ID . NUM
+
+    NUM  shift, and go to state 21
+
+
+state 10
+
+    5 preprocess: DEFINE definition . preprocess
+
+    DEFINE  shift, and go to state 1
+    IMPORT  shift, and go to state 2
+
+    $default  reduce using rule 3 (preprocess)
+
+    preprocess  go to state 22
+
+
+state 11
+
+    8 definition: function_declaration .
+
+    $default  reduce using rule 8 (definition)
+
+
+state 12
+
+   12 function_declaration: type_declaration . '(' print_parameter ')' '{' statement '}'
+
+    '('  shift, and go to state 23
+
+
+state 13
+
+   14 type_declaration: type . ID_array
+
+    ID  shift, and go to state 24
+
+    ID_array  go to state 25
+
+
+state 14
+
+    6 head: '<' . HFILE '>'
+
+    HFILE  shift, and go to state 26
+
+
+state 15
+
+    7 head: '"' . HFILE '"'
+
+    HFILE  shift, and go to state 27
+
+
+state 16
+
+    4 preprocess: IMPORT head . preprocess
+
+    DEFINE  shift, and go to state 1
+    IMPORT  shift, and go to state 2
+
+    $default  reduce using rule 3 (preprocess)
+
+    preprocess  go to state 28
+
+
+state 17
+
+    0 $accept: Cprogram $end .
+
+    $default  accept
+
+
+state 18
+
+    2 Ccode: preprocess body .
+
+    $default  reduce using rule 2 (Ccode)
+
+
+state 19
+
+   11 body: function_declaration . body
+
+    INT   shift, and go to state 6
+    CHAR  shift, and go to state 7
+    VOID  shift, and go to state 8
+
+    $default  reduce using rule 10 (body)
+
+    body                  go to state 29
+    function_declaration  go to state 19
+    type_declaration      go to state 12
+    type                  go to state 13
+
+
+state 20
+
+   13 function_declaration: VOID ID . '(' print_parameter ')' '{' statement '}'
+
+    '('  shift, and go to state 30
+
+
+state 21
+
+    9 definition: ID NUM .
+
+    $default  reduce using rule 9 (definition)
+
+
+state 22
+
+    5 preprocess: DEFINE definition preprocess .
+
+    $default  reduce using rule 5 (preprocess)
+
+
+state 23
+
+   12 function_declaration: type_declaration '(' . print_parameter ')' '{' statement '}'
+
+    INT   shift, and go to state 6
+    CHAR  shift, and go to state 7
+
+    $default  reduce using rule 23 (parameter)
+
+    type_declaration  go to state 31
+    type              go to state 13
+    print_parameter   go to state 32
+    parameter         go to state 33
+
+
+state 24
+
+   15 ID_array: ID . array_dimention
+
+    '['  shift, and go to state 34
+
+    $default  reduce using rule 18 (array_dimention)
+
+    array_dimention  go to state 35
+
+
+state 25
+
+   14 type_declaration: type ID_array .
+
+    $default  reduce using rule 14 (type_declaration)
+
+
+state 26
+
+    6 head: '<' HFILE . '>'
+
+    '>'  shift, and go to state 36
+
+
+state 27
+
+    7 head: '"' HFILE . '"'
+
+    '"'  shift, and go to state 37
+
+
+state 28
+
+    4 preprocess: IMPORT head preprocess .
+
+    $default  reduce using rule 4 (preprocess)
+
+
+state 29
+
+   11 body: function_declaration body .
+
+    $default  reduce using rule 11 (body)
+
+
+state 30
+
+   13 function_declaration: VOID ID '(' . print_parameter ')' '{' statement '}'
+
+    INT   shift, and go to state 6
+    CHAR  shift, and go to state 7
+
+    $default  reduce using rule 23 (parameter)
+
+    type_declaration  go to state 31
+    type              go to state 13
+    print_parameter   go to state 38
+    parameter         go to state 33
+
+
+state 31
+
+   24 parameter: type_declaration .
+   25          | type_declaration . ',' parameter
+
+    ','  shift, and go to state 39
+
+    $default  reduce using rule 24 (parameter)
+
+
+state 32
+
+   12 function_declaration: type_declaration '(' print_parameter . ')' '{' statement '}'
+
+    ')'  shift, and go to state 40
+
+
+state 33
+
+   22 print_parameter: parameter .
+
+    $default  reduce using rule 22 (print_parameter)
+
+
+state 34
+
+   19 array_dimention: '[' . ']' array_dimention
+   20                | '[' . NUM ']' array_dimention
+   21                | '[' . ID ']' array_dimention
+
+    ID   shift, and go to state 41
+    NUM  shift, and go to state 42
+    ']'  shift, and go to state 43
+
+
+state 35
+
+   15 ID_array: ID array_dimention .
+
+    $default  reduce using rule 15 (ID_array)
+
+
+state 36
+
+    6 head: '<' HFILE '>' .
+
+    $default  reduce using rule 6 (head)
+
+
+state 37
+
+    7 head: '"' HFILE '"' .
+
+    $default  reduce using rule 7 (head)
+
+
+state 38
+
+   13 function_declaration: VOID ID '(' print_parameter . ')' '{' statement '}'
+
+    ')'  shift, and go to state 44
+
+
+state 39
+
+   25 parameter: type_declaration ',' . parameter
+
+    INT   shift, and go to state 6
+    CHAR  shift, and go to state 7
+
+    $default  reduce using rule 23 (parameter)
+
+    type_declaration  go to state 31
+    type              go to state 13
+    parameter         go to state 45
+
+
+state 40
+
+   12 function_declaration: type_declaration '(' print_parameter ')' . '{' statement '}'
+
+    '{'  shift, and go to state 46
+
+
+state 41
+
+   21 array_dimention: '[' ID . ']' array_dimention
+
+    ']'  shift, and go to state 47
+
+
+state 42
+
+   20 array_dimention: '[' NUM . ']' array_dimention
+
+    ']'  shift, and go to state 48
+
+
+state 43
+
+   19 array_dimention: '[' ']' . array_dimention
+
+    '['  shift, and go to state 34
+
+    $default  reduce using rule 18 (array_dimention)
+
+    array_dimention  go to state 49
+
+
+state 44
+
+   13 function_declaration: VOID ID '(' print_parameter ')' . '{' statement '}'
+
+    '{'  shift, and go to state 50
+
+
+state 45
+
+   25 parameter: type_declaration ',' parameter .
+
+    $default  reduce using rule 25 (parameter)
+
+
+state 46
+
+   12 function_declaration: type_declaration '(' print_parameter ')' '{' . statement '}'
+
+    error     shift, and go to state 51
+    INT       shift, and go to state 6
+    CHAR      shift, and go to state 7
+    IF        shift, and go to state 52
+    FOR       shift, and go to state 53
+    CONTINUE  shift, and go to state 54
+    BREAK     shift, and go to state 55
+    ID        shift, and go to state 24
+    NUM       shift, and go to state 56
+    '('       shift, and go to state 57
+    '{'       shift, and go to state 58
+
+    '}'  reduce using rule 26 (statement)
+
+    type_declaration      go to state 59
+    ID_array              go to state 60
+    type                  go to state 13
+    statement             go to state 61
+    single_statement      go to state 62
+    clause                go to state 63
+    initialize_statement  go to state 64
+    variable_declaration  go to state 65
+    assignment_statement  go to state 66
+    if_statement          go to state 67
+    for_statement         go to state 68
+    loop_control          go to state 69
+    expression            go to state 70
+    factor                go to state 71
+
+
+state 47
+
+   21 array_dimention: '[' ID ']' . array_dimention
+
+    '['  shift, and go to state 34
+
+    $default  reduce using rule 18 (array_dimention)
+
+    array_dimention  go to state 72
+
+
+state 48
+
+   20 array_dimention: '[' NUM ']' . array_dimention
+
+    '['  shift, and go to state 34
+
+    $default  reduce using rule 18 (array_dimention)
+
+    array_dimention  go to state 73
+
+
+state 49
+
+   19 array_dimention: '[' ']' array_dimention .
+
+    $default  reduce using rule 19 (array_dimention)
+
+
+state 50
+
+   13 function_declaration: VOID ID '(' print_parameter ')' '{' . statement '}'
+
+    error     shift, and go to state 51
+    INT       shift, and go to state 6
+    CHAR      shift, and go to state 7
+    IF        shift, and go to state 52
+    FOR       shift, and go to state 53
+    CONTINUE  shift, and go to state 54
+    BREAK     shift, and go to state 55
+    ID        shift, and go to state 24
+    NUM       shift, and go to state 56
+    '('       shift, and go to state 57
+    '{'       shift, and go to state 58
+
+    '}'  reduce using rule 26 (statement)
+
+    type_declaration      go to state 59
+    ID_array              go to state 60
+    type                  go to state 13
+    statement             go to state 74
+    single_statement      go to state 62
+    clause                go to state 63
+    initialize_statement  go to state 64
+    variable_declaration  go to state 65
+    assignment_statement  go to state 66
+    if_statement          go to state 67
+    for_statement         go to state 68
+    loop_control          go to state 69
+    expression            go to state 70
+    factor                go to state 71
+
+
+state 51
+
+   33 single_statement: error . ';'
+
+    ';'  shift, and go to state 75
+
+
+state 52
+
+   45 if_statement: IF . '(' print_test ')' single_or_brace_statement
+
+    '('  shift, and go to state 76
+
+
+state 53
+
+   46 for_statement: FOR . '(' print_initialize ';' print_test ';' print_update ')' single_or_brace_statement
+
+    '('  shift, and go to state 77
+
+
+state 54
+
+   50 loop_control: CONTINUE .
+
+    $default  reduce using rule 50 (loop_control)
+
+
+state 55
+
+   51 loop_control: BREAK .
+
+    $default  reduce using rule 51 (loop_control)
+
+
+state 56
+
+   55 factor: NUM .
+
+    $default  reduce using rule 55 (factor)
+
+
+state 57
+
+   54 expression: '(' . expression ')'
+
+    ID   shift, and go to state 24
+    NUM  shift, and go to state 56
+    '('  shift, and go to state 57
+
+    ID_array    go to state 78
+    expression  go to state 79
+    factor      go to state 71
+
+
+state 58
+
+   29 statement: '{' . statement '}'
+
+    error     shift, and go to state 51
+    INT       shift, and go to state 6
+    CHAR      shift, and go to state 7
+    IF        shift, and go to state 52
+    FOR       shift, and go to state 53
+    CONTINUE  shift, and go to state 54
+    BREAK     shift, and go to state 55
+    ID        shift, and go to state 24
+    NUM       shift, and go to state 56
+    '('       shift, and go to state 57
+    '{'       shift, and go to state 58
+
+    '}'  reduce using rule 26 (statement)
+
+    type_declaration      go to state 59
+    ID_array              go to state 60
+    type                  go to state 13
+    statement             go to state 80
+    single_statement      go to state 62
+    clause                go to state 63
+    initialize_statement  go to state 64
+    variable_declaration  go to state 65
+    assignment_statement  go to state 66
+    if_statement          go to state 67
+    for_statement         go to state 68
+    loop_control          go to state 69
+    expression            go to state 70
+    factor                go to state 71
+
+
+state 59
+
+   40 variable_declaration: type_declaration . vars
+
+    OP_ASSIGN  shift, and go to state 81
+    ','        shift, and go to state 82
+
+    $default  reduce using rule 41 (vars)
+
+    vars  go to state 83
+
+
+state 60
+
+   44 assignment_statement: ID_array . OP_ASSIGN expression
+   52 expression: ID_array . OP_INC
+   56 factor: ID_array .
+
+    OP_ASSIGN  shift, and go to state 84
+    OP_INC     shift, and go to state 85
+
+    $default  reduce using rule 56 (factor)
+
+
+state 61
+
+   12 function_declaration: type_declaration '(' print_parameter ')' '{' statement . '}'
+
+    '}'  shift, and go to state 86
+
+
+state 62
+
+   27 statement: single_statement . statement
+
+    error     shift, and go to state 51
+    INT       shift, and go to state 6
+    CHAR      shift, and go to state 7
+    IF        shift, and go to state 52
+    FOR       shift, and go to state 53
+    CONTINUE  shift, and go to state 54
+    BREAK     shift, and go to state 55
+    ID        shift, and go to state 24
+    NUM       shift, and go to state 56
+    '('       shift, and go to state 57
+    '{'       shift, and go to state 58
+
+    '}'  reduce using rule 26 (statement)
+
+    type_declaration      go to state 59
+    ID_array              go to state 60
+    type                  go to state 13
+    statement             go to state 87
+    single_statement      go to state 62
+    clause                go to state 63
+    initialize_statement  go to state 64
+    variable_declaration  go to state 65
+    assignment_statement  go to state 66
+    if_statement          go to state 67
+    for_statement         go to state 68
+    loop_control          go to state 69
+    expression            go to state 70
+    factor                go to state 71
+
+
+state 63
+
+   28 statement: clause .
+
+    $default  reduce using rule 28 (statement)
+
+
+state 64
+
+   30 single_statement: initialize_statement . ';'
+
+    ';'  shift, and go to state 88
+
+
+state 65
+
+   38 initialize_statement: variable_declaration .
+
+    $default  reduce using rule 38 (initialize_statement)
+
+
+state 66
+
+   39 initialize_statement: assignment_statement .
+
+    $default  reduce using rule 39 (initialize_statement)
+
+
+state 67
+
+   34 clause: if_statement . statement
+
+    error     shift, and go to state 51
+    INT       shift, and go to state 6
+    CHAR      shift, and go to state 7
+    IF        shift, and go to state 52
+    FOR       shift, and go to state 53
+    CONTINUE  shift, and go to state 54
+    BREAK     shift, and go to state 55
+    ID        shift, and go to state 24
+    NUM       shift, and go to state 56
+    '('       shift, and go to state 57
+    '{'       shift, and go to state 58
+
+    '}'  reduce using rule 26 (statement)
+
+    type_declaration      go to state 59
+    ID_array              go to state 60
+    type                  go to state 13
+    statement             go to state 89
+    single_statement      go to state 62
+    clause                go to state 63
+    initialize_statement  go to state 64
+    variable_declaration  go to state 65
+    assignment_statement  go to state 66
+    if_statement          go to state 67
+    for_statement         go to state 68
+    loop_control          go to state 69
+    expression            go to state 70
+    factor                go to state 71
+
+
+state 68
+
+   35 clause: for_statement . statement
+
+    error     shift, and go to state 51
+    INT       shift, and go to state 6
+    CHAR      shift, and go to state 7
+    IF        shift, and go to state 52
+    FOR       shift, and go to state 53
+    CONTINUE  shift, and go to state 54
+    BREAK     shift, and go to state 55
+    ID        shift, and go to state 24
+    NUM       shift, and go to state 56
+    '('       shift, and go to state 57
+    '{'       shift, and go to state 58
+
+    '}'  reduce using rule 26 (statement)
+
+    type_declaration      go to state 59
+    ID_array              go to state 60
+    type                  go to state 13
+    statement             go to state 90
+    single_statement      go to state 62
+    clause                go to state 63
+    initialize_statement  go to state 64
+    variable_declaration  go to state 65
+    assignment_statement  go to state 66
+    if_statement          go to state 67
+    for_statement         go to state 68
+    loop_control          go to state 69
+    expression            go to state 70
+    factor                go to state 71
+
+
+state 69
+
+   32 single_statement: loop_control . ';'
+
+    ';'  shift, and go to state 91
+
+
+state 70
+
+   31 single_statement: expression . ';'
+
+    ';'  shift, and go to state 92
+
+
+state 71
+
+   53 expression: factor . operator_expression
+
+    OP_ADD    shift, and go to state 93
+    OP_MUL    shift, and go to state 94
+    OP_LOGIC  shift, and go to state 95
+    OP_REL    shift, and go to state 96
+
+    $default  reduce using rule 57 (operator_expression)
+
+    operator_expression  go to state 97
+
+
+state 72
+
+   21 array_dimention: '[' ID ']' array_dimention .
+
+    $default  reduce using rule 21 (array_dimention)
+
+
+state 73
+
+   20 array_dimention: '[' NUM ']' array_dimention .
+
+    $default  reduce using rule 20 (array_dimention)
+
+
+state 74
+
+   13 function_declaration: VOID ID '(' print_parameter ')' '{' statement . '}'
+
+    '}'  shift, and go to state 98
+
+
+state 75
+
+   33 single_statement: error ';' .
+
+    $default  reduce using rule 33 (single_statement)
+
+
+state 76
+
+   45 if_statement: IF '(' . print_test ')' single_or_brace_statement
+
+    ID   shift, and go to state 24
+    NUM  shift, and go to state 56
+    '('  shift, and go to state 57
+
+    ID_array    go to state 78
+    print_test  go to state 99
+    expression  go to state 100
+    factor      go to state 71
+
+
+state 77
+
+   46 for_statement: FOR '(' . print_initialize ';' print_test ';' print_update ')' single_or_brace_statement
+
+    INT   shift, and go to state 6
+    CHAR  shift, and go to state 7
+    ID    shift, and go to state 24
+
+    type_declaration      go to state 59
+    ID_array              go to state 101
+    type                  go to state 13
+    initialize_statement  go to state 102
+    variable_declaration  go to state 65
+    assignment_statement  go to state 66
+    print_initialize      go to state 103
+
+
+state 78
+
+   52 expression: ID_array . OP_INC
+   56 factor: ID_array .
+
+    OP_INC  shift, and go to state 85
+
+    $default  reduce using rule 56 (factor)
+
+
+state 79
+
+   54 expression: '(' expression . ')'
+
+    ')'  shift, and go to state 104
+
+
+state 80
+
+   29 statement: '{' statement . '}'
+
+    '}'  shift, and go to state 105
+
+
+state 81
+
+   43 vars: OP_ASSIGN . expression
+
+    ID   shift, and go to state 24
+    NUM  shift, and go to state 56
+    '('  shift, and go to state 57
+
+    ID_array    go to state 78
+    expression  go to state 106
+    factor      go to state 71
+
+
+state 82
+
+   42 vars: ',' . ID vars
+
+    ID  shift, and go to state 107
+
+
+state 83
+
+   40 variable_declaration: type_declaration vars .
+
+    $default  reduce using rule 40 (variable_declaration)
+
+
+state 84
+
+   44 assignment_statement: ID_array OP_ASSIGN . expression
+
+    ID   shift, and go to state 24
+    NUM  shift, and go to state 56
+    '('  shift, and go to state 57
+
+    ID_array    go to state 78
+    expression  go to state 108
+    factor      go to state 71
+
+
+state 85
+
+   52 expression: ID_array OP_INC .
+
+    $default  reduce using rule 52 (expression)
+
+
+state 86
+
+   12 function_declaration: type_declaration '(' print_parameter ')' '{' statement '}' .
+
+    $default  reduce using rule 12 (function_declaration)
+
+
+state 87
+
+   27 statement: single_statement statement .
+
+    $default  reduce using rule 27 (statement)
+
+
+state 88
+
+   30 single_statement: initialize_statement ';' .
+
+    $default  reduce using rule 30 (single_statement)
+
+
+state 89
+
+   34 clause: if_statement statement .
+
+    $default  reduce using rule 34 (clause)
+
+
+state 90
+
+   35 clause: for_statement statement .
+
+    $default  reduce using rule 35 (clause)
+
+
+state 91
+
+   32 single_statement: loop_control ';' .
+
+    $default  reduce using rule 32 (single_statement)
+
+
+state 92
+
+   31 single_statement: expression ';' .
+
+    $default  reduce using rule 31 (single_statement)
+
+
+state 93
+
+   58 operator_expression: OP_ADD . expression
+
+    ID   shift, and go to state 24
+    NUM  shift, and go to state 56
+    '('  shift, and go to state 57
+
+    ID_array    go to state 78
+    expression  go to state 109
+    factor      go to state 71
+
+
+state 94
+
+   59 operator_expression: OP_MUL . expression
+
+    ID   shift, and go to state 24
+    NUM  shift, and go to state 56
+    '('  shift, and go to state 57
+
+    ID_array    go to state 78
+    expression  go to state 110
+    factor      go to state 71
+
+
+state 95
+
+   60 operator_expression: OP_LOGIC . expression
+
+    ID   shift, and go to state 24
+    NUM  shift, and go to state 56
+    '('  shift, and go to state 57
+
+    ID_array    go to state 78
+    expression  go to state 111
+    factor      go to state 71
+
+
+state 96
+
+   61 operator_expression: OP_REL . expression
+
+    ID   shift, and go to state 24
+    NUM  shift, and go to state 56
+    '('  shift, and go to state 57
+
+    ID_array    go to state 78
+    expression  go to state 112
+    factor      go to state 71
+
+
+state 97
+
+   53 expression: factor operator_expression .
+
+    $default  reduce using rule 53 (expression)
+
+
+state 98
+
+   13 function_declaration: VOID ID '(' print_parameter ')' '{' statement '}' .
+
+    $default  reduce using rule 13 (function_declaration)
+
+
+state 99
+
+   45 if_statement: IF '(' print_test . ')' single_or_brace_statement
+
+    ')'  shift, and go to state 113
+
+
+state 100
+
+   48 print_test: expression .
+
+    $default  reduce using rule 48 (print_test)
+
+
+state 101
+
+   44 assignment_statement: ID_array . OP_ASSIGN expression
+
+    OP_ASSIGN  shift, and go to state 84
+
+
+state 102
+
+   47 print_initialize: initialize_statement .
+
+    $default  reduce using rule 47 (print_initialize)
+
+
+state 103
+
+   46 for_statement: FOR '(' print_initialize . ';' print_test ';' print_update ')' single_or_brace_statement
+
+    ';'  shift, and go to state 114
+
+
+state 104
+
+   54 expression: '(' expression ')' .
+
+    $default  reduce using rule 54 (expression)
+
+
+state 105
+
+   29 statement: '{' statement '}' .
+
+    $default  reduce using rule 29 (statement)
+
+
+state 106
+
+   43 vars: OP_ASSIGN expression .
+
+    $default  reduce using rule 43 (vars)
+
+
+state 107
+
+   42 vars: ',' ID . vars
+
+    OP_ASSIGN  shift, and go to state 81
+    ','        shift, and go to state 82
+
+    $default  reduce using rule 41 (vars)
+
+    vars  go to state 115
+
+
+state 108
+
+   44 assignment_statement: ID_array OP_ASSIGN expression .
+
+    $default  reduce using rule 44 (assignment_statement)
+
+
+state 109
+
+   58 operator_expression: OP_ADD expression .
+
+    $default  reduce using rule 58 (operator_expression)
+
+
+state 110
+
+   59 operator_expression: OP_MUL expression .
+
+    $default  reduce using rule 59 (operator_expression)
+
+
+state 111
+
+   60 operator_expression: OP_LOGIC expression .
+
+    $default  reduce using rule 60 (operator_expression)
+
+
+state 112
+
+   61 operator_expression: OP_REL expression .
+
+    $default  reduce using rule 61 (operator_expression)
+
+
+state 113
+
+   45 if_statement: IF '(' print_test ')' . single_or_brace_statement
+
+    error     shift, and go to state 51
+    INT       shift, and go to state 6
+    CHAR      shift, and go to state 7
+    CONTINUE  shift, and go to state 54
+    BREAK     shift, and go to state 55
+    ID        shift, and go to state 24
+    NUM       shift, and go to state 56
+    '('       shift, and go to state 57
+    '{'       shift, and go to state 116
+
+    type_declaration           go to state 59
+    ID_array                   go to state 60
+    type                       go to state 13
+    single_statement           go to state 117
+    single_or_brace_statement  go to state 118
+    initialize_statement       go to state 64
+    variable_declaration       go to state 65
+    assignment_statement       go to state 66
+    loop_control               go to state 69
+    expression                 go to state 70
+    factor                     go to state 71
+
+
+state 114
+
+   46 for_statement: FOR '(' print_initialize ';' . print_test ';' print_update ')' single_or_brace_statement
+
+    ID   shift, and go to state 24
+    NUM  shift, and go to state 56
+    '('  shift, and go to state 57
+
+    ID_array    go to state 78
+    print_test  go to state 119
+    expression  go to state 100
+    factor      go to state 71
+
+
+state 115
+
+   42 vars: ',' ID vars .
+
+    $default  reduce using rule 42 (vars)
+
+
+state 116
+
+   37 single_or_brace_statement: '{' . statement '}'
+
+    error     shift, and go to state 51
+    INT       shift, and go to state 6
+    CHAR      shift, and go to state 7
+    IF        shift, and go to state 52
+    FOR       shift, and go to state 53
+    CONTINUE  shift, and go to state 54
+    BREAK     shift, and go to state 55
+    ID        shift, and go to state 24
+    NUM       shift, and go to state 56
+    '('       shift, and go to state 57
+    '{'       shift, and go to state 58
+
+    '}'  reduce using rule 26 (statement)
+
+    type_declaration      go to state 59
+    ID_array              go to state 60
+    type                  go to state 13
+    statement             go to state 120
+    single_statement      go to state 62
+    clause                go to state 63
+    initialize_statement  go to state 64
+    variable_declaration  go to state 65
+    assignment_statement  go to state 66
+    if_statement          go to state 67
+    for_statement         go to state 68
+    loop_control          go to state 69
+    expression            go to state 70
+    factor                go to state 71
+
+
+state 117
+
+   36 single_or_brace_statement: single_statement .
+
+    $default  reduce using rule 36 (single_or_brace_statement)
+
+
+state 118
+
+   45 if_statement: IF '(' print_test ')' single_or_brace_statement .
+
+    $default  reduce using rule 45 (if_statement)
+
+
+state 119
+
+   46 for_statement: FOR '(' print_initialize ';' print_test . ';' print_update ')' single_or_brace_statement
+
+    ';'  shift, and go to state 121
+
+
+state 120
+
+   37 single_or_brace_statement: '{' statement . '}'
+
+    '}'  shift, and go to state 122
+
+
+state 121
+
+   46 for_statement: FOR '(' print_initialize ';' print_test ';' . print_update ')' single_or_brace_statement
+
+    ID   shift, and go to state 24
+    NUM  shift, and go to state 56
+    '('  shift, and go to state 57
+
+    ID_array      go to state 78
+    print_update  go to state 123
+    expression    go to state 124
+    factor        go to state 71
+
+
+state 122
+
+   37 single_or_brace_statement: '{' statement '}' .
+
+    $default  reduce using rule 37 (single_or_brace_statement)
+
+
+state 123
+
+   46 for_statement: FOR '(' print_initialize ';' print_test ';' print_update . ')' single_or_brace_statement
+
+    ')'  shift, and go to state 125
+
+
+state 124
+
+   49 print_update: expression .
+
+    $default  reduce using rule 49 (print_update)
+
+
+state 125
+
+   46 for_statement: FOR '(' print_initialize ';' print_test ';' print_update ')' . single_or_brace_statement
+
+    error     shift, and go to state 51
+    INT       shift, and go to state 6
+    CHAR      shift, and go to state 7
+    CONTINUE  shift, and go to state 54
+    BREAK     shift, and go to state 55
+    ID        shift, and go to state 24
+    NUM       shift, and go to state 56
+    '('       shift, and go to state 57
+    '{'       shift, and go to state 116
+
+    type_declaration           go to state 59
+    ID_array                   go to state 60
+    type                       go to state 13
+    single_statement           go to state 117
+    single_or_brace_statement  go to state 126
+    initialize_statement       go to state 64
+    variable_declaration       go to state 65
+    assignment_statement       go to state 66
+    loop_control               go to state 69
+    expression                 go to state 70
+    factor                     go to state 71
+
+
+state 126
+
+   46 for_statement: FOR '(' print_initialize ';' print_test ';' print_update ')' single_or_brace_statement .
+
+    $default  reduce using rule 46 (for_statement)
