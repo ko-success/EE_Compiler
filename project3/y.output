@@ -1,0 +1,1124 @@
+Useless nonterminals
+
+   expr
+
+
+Useless rules
+
+   46 expr: rel_expr
+   47     | inc_expr
+   48     | al_expr
+
+
+State 39 conflicts: 1 shift/reduce
+State 47 conflicts: 7 shift/reduce
+State 66 conflicts: 2 shift/reduce
+State 67 conflicts: 2 shift/reduce
+State 76 conflicts: 2 shift/reduce
+State 77 conflicts: 2 shift/reduce
+
+
+Grammar
+
+    0 $accept: goal $end
+
+    1 goal: c_code
+
+    2 c_code: code
+    3       | c_code code
+
+    4 code: define_header
+    5     | func_def
+
+    6 define_header: DEFINE ID NUM
+
+    7 func_def: type ID LPAREN func_arg_dec RPAREN LBRACE body RBRACE
+
+    8 func_arg_dec: decl_list
+
+    9 body: clause
+   10     | statement
+   11     | body body
+
+   12 clause: FOR LPAREN init_stmt test_expr SEMICOLON update_stmt RPAREN LBRACE body RBRACE
+   13       | IF LPAREN test_expr RPAREN LBRACE body RBRACE
+   14       | IF LPAREN test_expr RPAREN statement
+
+   15 statement: assign_stmt SEMICOLON
+   16          | continue_stmt SEMICOLON
+   17          | decl_list SEMICOLON
+   18          | error SEMICOLON
+
+   19 init_stmt: assign_stmt SEMICOLON
+   20          | decl_list SEMICOLON
+
+   21 update_stmt: inc_expr
+   22            | decl_list
+
+   23 assign_stmt: variable OP_ASSIGN al_expr
+
+   24 continue_stmt: CONTINUE
+
+   25 test_expr: rel_expr
+
+   26 decl_list: decl_init
+   27          | decl_list COMMA variable
+   28          | decl_list COMMA decl_init
+
+   29 decl_init: type variable
+
+   30 al_expr: NUM
+   31        | variable
+   32        | al_expr OP_ADD al_expr
+   33        | al_expr OP_MUL al_expr
+
+   34 rel_expr: value
+   35         | rel_expr OP_REL rel_expr
+   36         | rel_expr OP_LOGIC rel_expr
+
+   37 inc_expr: variable OP_INC
+
+   38 value: variable
+   39      | NUM
+
+   40 variable: ID
+   41         | variable LBRACKET RBRACKET
+   42         | variable LBRACKET NUM RBRACKET
+   43         | variable LBRACKET al_expr RBRACKET
+
+   44 type: VOID
+   45     | INT
+
+
+Terminals, with rules where they appear
+
+$end (0) 0
+error (256) 18
+DEFINE (258) 6
+INT (259) 45
+VOID (260) 44
+IF (261) 13 14
+FOR (262) 12
+CONTINUE (263) 24
+OP_ASSIGN (264) 23
+OP_INC (265) 37
+OP_ADD (266) 32
+OP_MUL (267) 33
+OP_LOGIC (268) 36
+OP_REL (269) 35
+ID (270) 6 7 40
+NUM (271) 6 30 39 42
+LPAREN (272) 7 12 13 14
+RPAREN (273) 7 12 13 14
+LBRACE (274) 7 12 13
+RBRACE (275) 7 12 13
+LBRACKET (276) 41 42 43
+RBRACKET (277) 41 42 43
+COMMA (278) 27 28
+SEMICOLON (279) 12 15 16 17 18 19 20
+
+
+Nonterminals, with rules where they appear
+
+$accept (25)
+    on left: 0
+goal (26)
+    on left: 1, on right: 0
+c_code (27)
+    on left: 2 3, on right: 1 3
+code (28)
+    on left: 4 5, on right: 2 3
+define_header (29)
+    on left: 6, on right: 4
+func_def (30)
+    on left: 7, on right: 5
+func_arg_dec (31)
+    on left: 8, on right: 7
+body (32)
+    on left: 9 10 11, on right: 7 11 12 13
+clause (33)
+    on left: 12 13 14, on right: 9
+statement (34)
+    on left: 15 16 17 18, on right: 10 14
+init_stmt (35)
+    on left: 19 20, on right: 12
+update_stmt (36)
+    on left: 21 22, on right: 12
+assign_stmt (37)
+    on left: 23, on right: 15 19
+continue_stmt (38)
+    on left: 24, on right: 16
+test_expr (39)
+    on left: 25, on right: 12 13 14
+decl_list (40)
+    on left: 26 27 28, on right: 8 17 20 22 27 28
+decl_init (41)
+    on left: 29, on right: 26 28
+al_expr (42)
+    on left: 30 31 32 33, on right: 23 32 33 43
+rel_expr (43)
+    on left: 34 35 36, on right: 25 35 36
+inc_expr (44)
+    on left: 37, on right: 21
+value (45)
+    on left: 38 39, on right: 34
+variable (46)
+    on left: 40 41 42 43, on right: 23 27 29 31 37 38 41 42 43
+type (47)
+    on left: 44 45, on right: 7 29
+
+
+state 0
+
+    0 $accept: . goal $end
+
+    DEFINE  shift, and go to state 1
+    INT     shift, and go to state 2
+    VOID    shift, and go to state 3
+
+    goal           go to state 4
+    c_code         go to state 5
+    code           go to state 6
+    define_header  go to state 7
+    func_def       go to state 8
+    type           go to state 9
+
+
+state 1
+
+    6 define_header: DEFINE . ID NUM
+
+    ID  shift, and go to state 10
+
+
+state 2
+
+   45 type: INT .
+
+    $default  reduce using rule 45 (type)
+
+
+state 3
+
+   44 type: VOID .
+
+    $default  reduce using rule 44 (type)
+
+
+state 4
+
+    0 $accept: goal . $end
+
+    $end  shift, and go to state 11
+
+
+state 5
+
+    1 goal: c_code .
+    3 c_code: c_code . code
+
+    DEFINE  shift, and go to state 1
+    INT     shift, and go to state 2
+    VOID    shift, and go to state 3
+
+    $default  reduce using rule 1 (goal)
+
+    code           go to state 12
+    define_header  go to state 7
+    func_def       go to state 8
+    type           go to state 9
+
+
+state 6
+
+    2 c_code: code .
+
+    $default  reduce using rule 2 (c_code)
+
+
+state 7
+
+    4 code: define_header .
+
+    $default  reduce using rule 4 (code)
+
+
+state 8
+
+    5 code: func_def .
+
+    $default  reduce using rule 5 (code)
+
+
+state 9
+
+    7 func_def: type . ID LPAREN func_arg_dec RPAREN LBRACE body RBRACE
+
+    ID  shift, and go to state 13
+
+
+state 10
+
+    6 define_header: DEFINE ID . NUM
+
+    NUM  shift, and go to state 14
+
+
+state 11
+
+    0 $accept: goal $end .
+
+    $default  accept
+
+
+state 12
+
+    3 c_code: c_code code .
+
+    $default  reduce using rule 3 (c_code)
+
+
+state 13
+
+    7 func_def: type ID . LPAREN func_arg_dec RPAREN LBRACE body RBRACE
+
+    LPAREN  shift, and go to state 15
+
+
+state 14
+
+    6 define_header: DEFINE ID NUM .
+
+    $default  reduce using rule 6 (define_header)
+
+
+state 15
+
+    7 func_def: type ID LPAREN . func_arg_dec RPAREN LBRACE body RBRACE
+
+    INT   shift, and go to state 2
+    VOID  shift, and go to state 3
+
+    func_arg_dec  go to state 16
+    decl_list     go to state 17
+    decl_init     go to state 18
+    type          go to state 19
+
+
+state 16
+
+    7 func_def: type ID LPAREN func_arg_dec . RPAREN LBRACE body RBRACE
+
+    RPAREN  shift, and go to state 20
+
+
+state 17
+
+    8 func_arg_dec: decl_list .
+   27 decl_list: decl_list . COMMA variable
+   28          | decl_list . COMMA decl_init
+
+    COMMA  shift, and go to state 21
+
+    $default  reduce using rule 8 (func_arg_dec)
+
+
+state 18
+
+   26 decl_list: decl_init .
+
+    $default  reduce using rule 26 (decl_list)
+
+
+state 19
+
+   29 decl_init: type . variable
+
+    ID  shift, and go to state 22
+
+    variable  go to state 23
+
+
+state 20
+
+    7 func_def: type ID LPAREN func_arg_dec RPAREN . LBRACE body RBRACE
+
+    LBRACE  shift, and go to state 24
+
+
+state 21
+
+   27 decl_list: decl_list COMMA . variable
+   28          | decl_list COMMA . decl_init
+
+    INT   shift, and go to state 2
+    VOID  shift, and go to state 3
+    ID    shift, and go to state 22
+
+    decl_init  go to state 25
+    variable   go to state 26
+    type       go to state 19
+
+
+state 22
+
+   40 variable: ID .
+
+    $default  reduce using rule 40 (variable)
+
+
+state 23
+
+   29 decl_init: type variable .
+   41 variable: variable . LBRACKET RBRACKET
+   42         | variable . LBRACKET NUM RBRACKET
+   43         | variable . LBRACKET al_expr RBRACKET
+
+    LBRACKET  shift, and go to state 27
+
+    $default  reduce using rule 29 (decl_init)
+
+
+state 24
+
+    7 func_def: type ID LPAREN func_arg_dec RPAREN LBRACE . body RBRACE
+
+    error     shift, and go to state 28
+    INT       shift, and go to state 2
+    VOID      shift, and go to state 3
+    IF        shift, and go to state 29
+    FOR       shift, and go to state 30
+    CONTINUE  shift, and go to state 31
+    ID        shift, and go to state 22
+
+    body           go to state 32
+    clause         go to state 33
+    statement      go to state 34
+    assign_stmt    go to state 35
+    continue_stmt  go to state 36
+    decl_list      go to state 37
+    decl_init      go to state 18
+    variable       go to state 38
+    type           go to state 19
+
+
+state 25
+
+   28 decl_list: decl_list COMMA decl_init .
+
+    $default  reduce using rule 28 (decl_list)
+
+
+state 26
+
+   27 decl_list: decl_list COMMA variable .
+   41 variable: variable . LBRACKET RBRACKET
+   42         | variable . LBRACKET NUM RBRACKET
+   43         | variable . LBRACKET al_expr RBRACKET
+
+    LBRACKET  shift, and go to state 27
+
+    $default  reduce using rule 27 (decl_list)
+
+
+state 27
+
+   41 variable: variable LBRACKET . RBRACKET
+   42         | variable LBRACKET . NUM RBRACKET
+   43         | variable LBRACKET . al_expr RBRACKET
+
+    ID        shift, and go to state 22
+    NUM       shift, and go to state 39
+    RBRACKET  shift, and go to state 40
+
+    al_expr   go to state 41
+    variable  go to state 42
+
+
+state 28
+
+   18 statement: error . SEMICOLON
+
+    SEMICOLON  shift, and go to state 43
+
+
+state 29
+
+   13 clause: IF . LPAREN test_expr RPAREN LBRACE body RBRACE
+   14       | IF . LPAREN test_expr RPAREN statement
+
+    LPAREN  shift, and go to state 44
+
+
+state 30
+
+   12 clause: FOR . LPAREN init_stmt test_expr SEMICOLON update_stmt RPAREN LBRACE body RBRACE
+
+    LPAREN  shift, and go to state 45
+
+
+state 31
+
+   24 continue_stmt: CONTINUE .
+
+    $default  reduce using rule 24 (continue_stmt)
+
+
+state 32
+
+    7 func_def: type ID LPAREN func_arg_dec RPAREN LBRACE body . RBRACE
+   11 body: body . body
+
+    error     shift, and go to state 28
+    INT       shift, and go to state 2
+    VOID      shift, and go to state 3
+    IF        shift, and go to state 29
+    FOR       shift, and go to state 30
+    CONTINUE  shift, and go to state 31
+    ID        shift, and go to state 22
+    RBRACE    shift, and go to state 46
+
+    body           go to state 47
+    clause         go to state 33
+    statement      go to state 34
+    assign_stmt    go to state 35
+    continue_stmt  go to state 36
+    decl_list      go to state 37
+    decl_init      go to state 18
+    variable       go to state 38
+    type           go to state 19
+
+
+state 33
+
+    9 body: clause .
+
+    $default  reduce using rule 9 (body)
+
+
+state 34
+
+   10 body: statement .
+
+    $default  reduce using rule 10 (body)
+
+
+state 35
+
+   15 statement: assign_stmt . SEMICOLON
+
+    SEMICOLON  shift, and go to state 48
+
+
+state 36
+
+   16 statement: continue_stmt . SEMICOLON
+
+    SEMICOLON  shift, and go to state 49
+
+
+state 37
+
+   17 statement: decl_list . SEMICOLON
+   27 decl_list: decl_list . COMMA variable
+   28          | decl_list . COMMA decl_init
+
+    COMMA      shift, and go to state 21
+    SEMICOLON  shift, and go to state 50
+
+
+state 38
+
+   23 assign_stmt: variable . OP_ASSIGN al_expr
+   41 variable: variable . LBRACKET RBRACKET
+   42         | variable . LBRACKET NUM RBRACKET
+   43         | variable . LBRACKET al_expr RBRACKET
+
+    OP_ASSIGN  shift, and go to state 51
+    LBRACKET   shift, and go to state 27
+
+
+state 39
+
+   30 al_expr: NUM .
+   42 variable: variable LBRACKET NUM . RBRACKET
+
+    RBRACKET  shift, and go to state 52
+
+    RBRACKET  [reduce using rule 30 (al_expr)]
+    $default  reduce using rule 30 (al_expr)
+
+
+state 40
+
+   41 variable: variable LBRACKET RBRACKET .
+
+    $default  reduce using rule 41 (variable)
+
+
+state 41
+
+   32 al_expr: al_expr . OP_ADD al_expr
+   33        | al_expr . OP_MUL al_expr
+   43 variable: variable LBRACKET al_expr . RBRACKET
+
+    OP_ADD    shift, and go to state 53
+    OP_MUL    shift, and go to state 54
+    RBRACKET  shift, and go to state 55
+
+
+state 42
+
+   31 al_expr: variable .
+   41 variable: variable . LBRACKET RBRACKET
+   42         | variable . LBRACKET NUM RBRACKET
+   43         | variable . LBRACKET al_expr RBRACKET
+
+    LBRACKET  shift, and go to state 27
+
+    $default  reduce using rule 31 (al_expr)
+
+
+state 43
+
+   18 statement: error SEMICOLON .
+
+    $default  reduce using rule 18 (statement)
+
+
+state 44
+
+   13 clause: IF LPAREN . test_expr RPAREN LBRACE body RBRACE
+   14       | IF LPAREN . test_expr RPAREN statement
+
+    ID   shift, and go to state 22
+    NUM  shift, and go to state 56
+
+    test_expr  go to state 57
+    rel_expr   go to state 58
+    value      go to state 59
+    variable   go to state 60
+
+
+state 45
+
+   12 clause: FOR LPAREN . init_stmt test_expr SEMICOLON update_stmt RPAREN LBRACE body RBRACE
+
+    INT   shift, and go to state 2
+    VOID  shift, and go to state 3
+    ID    shift, and go to state 22
+
+    init_stmt    go to state 61
+    assign_stmt  go to state 62
+    decl_list    go to state 63
+    decl_init    go to state 18
+    variable     go to state 38
+    type         go to state 19
+
+
+state 46
+
+    7 func_def: type ID LPAREN func_arg_dec RPAREN LBRACE body RBRACE .
+
+    $default  reduce using rule 7 (func_def)
+
+
+state 47
+
+   11 body: body . body
+   11     | body body .
+
+    error     shift, and go to state 28
+    INT       shift, and go to state 2
+    VOID      shift, and go to state 3
+    IF        shift, and go to state 29
+    FOR       shift, and go to state 30
+    CONTINUE  shift, and go to state 31
+    ID        shift, and go to state 22
+
+    error     [reduce using rule 11 (body)]
+    INT       [reduce using rule 11 (body)]
+    VOID      [reduce using rule 11 (body)]
+    IF        [reduce using rule 11 (body)]
+    FOR       [reduce using rule 11 (body)]
+    CONTINUE  [reduce using rule 11 (body)]
+    ID        [reduce using rule 11 (body)]
+    RBRACE    reduce using rule 11 (body)
+
+    body           go to state 47
+    clause         go to state 33
+    statement      go to state 34
+    assign_stmt    go to state 35
+    continue_stmt  go to state 36
+    decl_list      go to state 37
+    decl_init      go to state 18
+    variable       go to state 38
+    type           go to state 19
+
+
+state 48
+
+   15 statement: assign_stmt SEMICOLON .
+
+    $default  reduce using rule 15 (statement)
+
+
+state 49
+
+   16 statement: continue_stmt SEMICOLON .
+
+    $default  reduce using rule 16 (statement)
+
+
+state 50
+
+   17 statement: decl_list SEMICOLON .
+
+    $default  reduce using rule 17 (statement)
+
+
+state 51
+
+   23 assign_stmt: variable OP_ASSIGN . al_expr
+
+    ID   shift, and go to state 22
+    NUM  shift, and go to state 64
+
+    al_expr   go to state 65
+    variable  go to state 42
+
+
+state 52
+
+   42 variable: variable LBRACKET NUM RBRACKET .
+
+    $default  reduce using rule 42 (variable)
+
+
+state 53
+
+   32 al_expr: al_expr OP_ADD . al_expr
+
+    ID   shift, and go to state 22
+    NUM  shift, and go to state 64
+
+    al_expr   go to state 66
+    variable  go to state 42
+
+
+state 54
+
+   33 al_expr: al_expr OP_MUL . al_expr
+
+    ID   shift, and go to state 22
+    NUM  shift, and go to state 64
+
+    al_expr   go to state 67
+    variable  go to state 42
+
+
+state 55
+
+   43 variable: variable LBRACKET al_expr RBRACKET .
+
+    $default  reduce using rule 43 (variable)
+
+
+state 56
+
+   39 value: NUM .
+
+    $default  reduce using rule 39 (value)
+
+
+state 57
+
+   13 clause: IF LPAREN test_expr . RPAREN LBRACE body RBRACE
+   14       | IF LPAREN test_expr . RPAREN statement
+
+    RPAREN  shift, and go to state 68
+
+
+state 58
+
+   25 test_expr: rel_expr .
+   35 rel_expr: rel_expr . OP_REL rel_expr
+   36         | rel_expr . OP_LOGIC rel_expr
+
+    OP_LOGIC  shift, and go to state 69
+    OP_REL    shift, and go to state 70
+
+    $default  reduce using rule 25 (test_expr)
+
+
+state 59
+
+   34 rel_expr: value .
+
+    $default  reduce using rule 34 (rel_expr)
+
+
+state 60
+
+   38 value: variable .
+   41 variable: variable . LBRACKET RBRACKET
+   42         | variable . LBRACKET NUM RBRACKET
+   43         | variable . LBRACKET al_expr RBRACKET
+
+    LBRACKET  shift, and go to state 27
+
+    $default  reduce using rule 38 (value)
+
+
+state 61
+
+   12 clause: FOR LPAREN init_stmt . test_expr SEMICOLON update_stmt RPAREN LBRACE body RBRACE
+
+    ID   shift, and go to state 22
+    NUM  shift, and go to state 56
+
+    test_expr  go to state 71
+    rel_expr   go to state 58
+    value      go to state 59
+    variable   go to state 60
+
+
+state 62
+
+   19 init_stmt: assign_stmt . SEMICOLON
+
+    SEMICOLON  shift, and go to state 72
+
+
+state 63
+
+   20 init_stmt: decl_list . SEMICOLON
+   27 decl_list: decl_list . COMMA variable
+   28          | decl_list . COMMA decl_init
+
+    COMMA      shift, and go to state 21
+    SEMICOLON  shift, and go to state 73
+
+
+state 64
+
+   30 al_expr: NUM .
+
+    $default  reduce using rule 30 (al_expr)
+
+
+state 65
+
+   23 assign_stmt: variable OP_ASSIGN al_expr .
+   32 al_expr: al_expr . OP_ADD al_expr
+   33        | al_expr . OP_MUL al_expr
+
+    OP_ADD  shift, and go to state 53
+    OP_MUL  shift, and go to state 54
+
+    $default  reduce using rule 23 (assign_stmt)
+
+
+state 66
+
+   32 al_expr: al_expr . OP_ADD al_expr
+   32        | al_expr OP_ADD al_expr .
+   33        | al_expr . OP_MUL al_expr
+
+    OP_ADD  shift, and go to state 53
+    OP_MUL  shift, and go to state 54
+
+    OP_ADD    [reduce using rule 32 (al_expr)]
+    OP_MUL    [reduce using rule 32 (al_expr)]
+    $default  reduce using rule 32 (al_expr)
+
+
+state 67
+
+   32 al_expr: al_expr . OP_ADD al_expr
+   33        | al_expr . OP_MUL al_expr
+   33        | al_expr OP_MUL al_expr .
+
+    OP_ADD  shift, and go to state 53
+    OP_MUL  shift, and go to state 54
+
+    OP_ADD    [reduce using rule 33 (al_expr)]
+    OP_MUL    [reduce using rule 33 (al_expr)]
+    $default  reduce using rule 33 (al_expr)
+
+
+state 68
+
+   13 clause: IF LPAREN test_expr RPAREN . LBRACE body RBRACE
+   14       | IF LPAREN test_expr RPAREN . statement
+
+    error     shift, and go to state 28
+    INT       shift, and go to state 2
+    VOID      shift, and go to state 3
+    CONTINUE  shift, and go to state 31
+    ID        shift, and go to state 22
+    LBRACE    shift, and go to state 74
+
+    statement      go to state 75
+    assign_stmt    go to state 35
+    continue_stmt  go to state 36
+    decl_list      go to state 37
+    decl_init      go to state 18
+    variable       go to state 38
+    type           go to state 19
+
+
+state 69
+
+   36 rel_expr: rel_expr OP_LOGIC . rel_expr
+
+    ID   shift, and go to state 22
+    NUM  shift, and go to state 56
+
+    rel_expr  go to state 76
+    value     go to state 59
+    variable  go to state 60
+
+
+state 70
+
+   35 rel_expr: rel_expr OP_REL . rel_expr
+
+    ID   shift, and go to state 22
+    NUM  shift, and go to state 56
+
+    rel_expr  go to state 77
+    value     go to state 59
+    variable  go to state 60
+
+
+state 71
+
+   12 clause: FOR LPAREN init_stmt test_expr . SEMICOLON update_stmt RPAREN LBRACE body RBRACE
+
+    SEMICOLON  shift, and go to state 78
+
+
+state 72
+
+   19 init_stmt: assign_stmt SEMICOLON .
+
+    $default  reduce using rule 19 (init_stmt)
+
+
+state 73
+
+   20 init_stmt: decl_list SEMICOLON .
+
+    $default  reduce using rule 20 (init_stmt)
+
+
+state 74
+
+   13 clause: IF LPAREN test_expr RPAREN LBRACE . body RBRACE
+
+    error     shift, and go to state 28
+    INT       shift, and go to state 2
+    VOID      shift, and go to state 3
+    IF        shift, and go to state 29
+    FOR       shift, and go to state 30
+    CONTINUE  shift, and go to state 31
+    ID        shift, and go to state 22
+
+    body           go to state 79
+    clause         go to state 33
+    statement      go to state 34
+    assign_stmt    go to state 35
+    continue_stmt  go to state 36
+    decl_list      go to state 37
+    decl_init      go to state 18
+    variable       go to state 38
+    type           go to state 19
+
+
+state 75
+
+   14 clause: IF LPAREN test_expr RPAREN statement .
+
+    $default  reduce using rule 14 (clause)
+
+
+state 76
+
+   35 rel_expr: rel_expr . OP_REL rel_expr
+   36         | rel_expr . OP_LOGIC rel_expr
+   36         | rel_expr OP_LOGIC rel_expr .
+
+    OP_LOGIC  shift, and go to state 69
+    OP_REL    shift, and go to state 70
+
+    OP_LOGIC  [reduce using rule 36 (rel_expr)]
+    OP_REL    [reduce using rule 36 (rel_expr)]
+    $default  reduce using rule 36 (rel_expr)
+
+
+state 77
+
+   35 rel_expr: rel_expr . OP_REL rel_expr
+   35         | rel_expr OP_REL rel_expr .
+   36         | rel_expr . OP_LOGIC rel_expr
+
+    OP_LOGIC  shift, and go to state 69
+    OP_REL    shift, and go to state 70
+
+    OP_LOGIC  [reduce using rule 35 (rel_expr)]
+    OP_REL    [reduce using rule 35 (rel_expr)]
+    $default  reduce using rule 35 (rel_expr)
+
+
+state 78
+
+   12 clause: FOR LPAREN init_stmt test_expr SEMICOLON . update_stmt RPAREN LBRACE body RBRACE
+
+    INT   shift, and go to state 2
+    VOID  shift, and go to state 3
+    ID    shift, and go to state 22
+
+    update_stmt  go to state 80
+    decl_list    go to state 81
+    decl_init    go to state 18
+    inc_expr     go to state 82
+    variable     go to state 83
+    type         go to state 19
+
+
+state 79
+
+   11 body: body . body
+   13 clause: IF LPAREN test_expr RPAREN LBRACE body . RBRACE
+
+    error     shift, and go to state 28
+    INT       shift, and go to state 2
+    VOID      shift, and go to state 3
+    IF        shift, and go to state 29
+    FOR       shift, and go to state 30
+    CONTINUE  shift, and go to state 31
+    ID        shift, and go to state 22
+    RBRACE    shift, and go to state 84
+
+    body           go to state 47
+    clause         go to state 33
+    statement      go to state 34
+    assign_stmt    go to state 35
+    continue_stmt  go to state 36
+    decl_list      go to state 37
+    decl_init      go to state 18
+    variable       go to state 38
+    type           go to state 19
+
+
+state 80
+
+   12 clause: FOR LPAREN init_stmt test_expr SEMICOLON update_stmt . RPAREN LBRACE body RBRACE
+
+    RPAREN  shift, and go to state 85
+
+
+state 81
+
+   22 update_stmt: decl_list .
+   27 decl_list: decl_list . COMMA variable
+   28          | decl_list . COMMA decl_init
+
+    COMMA  shift, and go to state 21
+
+    $default  reduce using rule 22 (update_stmt)
+
+
+state 82
+
+   21 update_stmt: inc_expr .
+
+    $default  reduce using rule 21 (update_stmt)
+
+
+state 83
+
+   37 inc_expr: variable . OP_INC
+   41 variable: variable . LBRACKET RBRACKET
+   42         | variable . LBRACKET NUM RBRACKET
+   43         | variable . LBRACKET al_expr RBRACKET
+
+    OP_INC    shift, and go to state 86
+    LBRACKET  shift, and go to state 27
+
+
+state 84
+
+   13 clause: IF LPAREN test_expr RPAREN LBRACE body RBRACE .
+
+    $default  reduce using rule 13 (clause)
+
+
+state 85
+
+   12 clause: FOR LPAREN init_stmt test_expr SEMICOLON update_stmt RPAREN . LBRACE body RBRACE
+
+    LBRACE  shift, and go to state 87
+
+
+state 86
+
+   37 inc_expr: variable OP_INC .
+
+    $default  reduce using rule 37 (inc_expr)
+
+
+state 87
+
+   12 clause: FOR LPAREN init_stmt test_expr SEMICOLON update_stmt RPAREN LBRACE . body RBRACE
+
+    error     shift, and go to state 28
+    INT       shift, and go to state 2
+    VOID      shift, and go to state 3
+    IF        shift, and go to state 29
+    FOR       shift, and go to state 30
+    CONTINUE  shift, and go to state 31
+    ID        shift, and go to state 22
+
+    body           go to state 88
+    clause         go to state 33
+    statement      go to state 34
+    assign_stmt    go to state 35
+    continue_stmt  go to state 36
+    decl_list      go to state 37
+    decl_init      go to state 18
+    variable       go to state 38
+    type           go to state 19
+
+
+state 88
+
+   11 body: body . body
+   12 clause: FOR LPAREN init_stmt test_expr SEMICOLON update_stmt RPAREN LBRACE body . RBRACE
+
+    error     shift, and go to state 28
+    INT       shift, and go to state 2
+    VOID      shift, and go to state 3
+    IF        shift, and go to state 29
+    FOR       shift, and go to state 30
+    CONTINUE  shift, and go to state 31
+    ID        shift, and go to state 22
+    RBRACE    shift, and go to state 89
+
+    body           go to state 47
+    clause         go to state 33
+    statement      go to state 34
+    assign_stmt    go to state 35
+    continue_stmt  go to state 36
+    decl_list      go to state 37
+    decl_init      go to state 18
+    variable       go to state 38
+    type           go to state 19
+
+
+state 89
+
+   12 clause: FOR LPAREN init_stmt test_expr SEMICOLON update_stmt RPAREN LBRACE body RBRACE .
+
+    $default  reduce using rule 12 (clause)
